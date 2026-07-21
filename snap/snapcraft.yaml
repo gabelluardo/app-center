@@ -15,22 +15,10 @@ parts:
     override-build: |
       bash $CRAFT_PART_SRC/scripts/install-fvm.sh
       if [ "$CRAFT_ARCH_BUILD_FOR" = riscv64 ]; then
-        fvm install --no-setup --skip-pub-get
-
-        # Temporary workaround: Flutter does not publish dart-sdk-linux-riscv64.zip. See https://github.com/flutter/flutter/issues/184306
-        # Flutter 3.44.2 uses Dart 3.12.2, which is available from dart-archive.
-        flutter_root="$HOME/fvm/versions/3.44.2"
-        engine_version="77e2e94772b6eb43759e34ed1ad7da4674e19cab"
-        mkdir -p "$flutter_root/bin/cache"
-        curl --fail --location --output "$flutter_root/bin/cache/dart-sdk-linux-riscv64.zip" \
-          https://storage.googleapis.com/dart-archive/channels/stable/release/3.12.2/sdk/dartsdk-linux-riscv64-release.zip
-        unzip -q "$flutter_root/bin/cache/dart-sdk-linux-riscv64.zip" -d "$flutter_root/bin/cache"
-        rm "$flutter_root/bin/cache/dart-sdk-linux-riscv64.zip"
-        printf '%s\n' "$engine_version" > "$flutter_root/bin/cache/engine.stamp"
-        printf '%s\n' "$engine_version" > "$flutter_root/bin/cache/engine-dart-sdk.stamp"
-      else
-        fvm install
+        # Temporary workaround for missing upstream Linux RISC-V artifacts.
+        export FLUTTER_STORAGE_BASE_URL=https://flutter-experimental.ubuntu.com
       fi
+      fvm install
       fvm flutter doctor
     build-packages:
       - clang
@@ -50,6 +38,10 @@ parts:
     plugin: nil
     override-build: |
       set -eux
+      if [ "$CRAFT_ARCH_BUILD_FOR" = riscv64 ]; then
+        # Temporary workaround for missing upstream Linux RISC-V artifacts.
+        export FLUTTER_STORAGE_BASE_URL=https://flutter-experimental.ubuntu.com
+      fi
       fvm install
       fvm dart pub global activate melos
 
