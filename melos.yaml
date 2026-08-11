@@ -8,8 +8,8 @@ command:
   bootstrap:
     enforceLockfile: true
     environment:
-      sdk: '>=3.12.0 <4.0.0'
-      flutter: '>=3.44.2'
+      sdk: ">=3.12.0 <4.0.0"
+      flutter: ">=3.44.0"
 
     dev_dependencies:
       ubuntu_lints: ^0.4.2
@@ -60,7 +60,7 @@ scripts:
 
   # sync app titles from l10n ARB files to desktop file
   sync-desktop-titles: >
-    ./scripts/import_app_title_to_desktop_file.py --arb-dir packages/app_center/lib/src/l10n --desktop-file packages/app_center/assets/app-center.desktop --name-variable appCenterLabel 
+    ./scripts/import_app_title_to_desktop_file.py --arb-dir packages/app_center/lib/src/l10n --desktop-file packages/app_center/assets/app-center.desktop --name-variable appCenterLabel
 
   # run integration tests in all packages
   integration_test: >
